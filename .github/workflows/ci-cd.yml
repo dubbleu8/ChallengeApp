@@ -22,6 +22,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        
+    - name: Run Unit Tests
+      run: pytest
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
@@ -32,4 +35,30 @@ jobs:
 
     - name: Push Docker image
       run: |
-        docker push dubbleu8/flask-app
+        docker push dubbleu8/flask-app:latest
+
+    - name: Send success email
+      if: success()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: ${{ secrets.SMTP_SERVER }}
+        server_port: ${{ secrets.SMTP_PORT }}
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: Build Success!
+        body: La build è andata a buon fine!
+        to: matteo.wielgosz@gmail.com
+        from: GitHub Actions <actions@example.com>
+
+    - name: Send failure email
+      if: failure()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: ${{ secrets.SMTP_SERVER }}
+        server_port: ${{ secrets.SMTP_PORT }}
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: Build Failed
+        body: La build è fallita!
+        to: matteo.wielgosz@gmail.com
+        from: GitHub Actions <actions@example.com>
