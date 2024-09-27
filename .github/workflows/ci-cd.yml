@@ -28,7 +28,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t dubbleu8/flask-app .
+        docker build -t dubbleu8/flask-app:latest .
 
     - name: Push Docker image
       run: |
