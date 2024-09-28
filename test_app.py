@@ -10,4 +10,4 @@ def test_homepage(client):
     """Test della homepage"""
     rv = client.get('/')
     assert rv.status_code == 200
-    assert b"Hello, World!" in rv.data
+    assert b"Ciao Patrizio, Challenge accepted! :)" in rv.data
