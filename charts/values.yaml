@@ -1,0 +1,26 @@
+replicaCount: 2
+image:
+  repository: dubbleu8/flask-app
+  tag: "latest"
+  pullPolicy: IfNotPresent
+service:
+  enabled: true
+  type: NodePort
+  port: 80
+  targetPort: 5000
+serviceAccount:
+  create: true
+  name: ""
+ingress:
+  enabled: true  # Imposta a true se vuoi abilitare l'ingress
+  annotations: {}
+  hosts:
+    - host: flask-app.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+autoscaling:
+  enabled: false
+env:
+  FLASK_ENV: production
